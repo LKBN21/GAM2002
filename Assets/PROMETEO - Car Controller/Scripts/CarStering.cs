@@ -10,10 +10,18 @@ public class CarStering : MonoBehaviour
     public float maxSteerAngle = 45f;
     public WheelCollider wheelFL;
     public WheelCollider wheelFR;
-
+    //public WheelCollider wheelBL;
+    //public WheelCollider wheelBR;
+    public float maxMotorTongue = 80f;
+    public float currentspeed;
+    public float maxSpeed = 100f;
+    public Vector3 centerOfmass;
+    public float sensorLenght = 5f;
+    public float frontsensorposition = 0.5f;
     // Start is called before the first frame update
     void Start()
     {
+        GetComponent<Rigidbody>().centerOfMass = centerOfmass;
         Transform[] pathTransforms = path.GetComponentsInChildren<Transform>();
         nodes = new List<Transform>();
 
@@ -35,6 +43,7 @@ public class CarStering : MonoBehaviour
         ApplySteer();
         Drive();
         Chechwaypointdistance();
+        sensor();
 
     }
     private void ApplySteer()
@@ -44,11 +53,23 @@ public class CarStering : MonoBehaviour
         float newSteer = (relativeVector.x / relativeVector.magnitude) * maxSteerAngle;
         wheelFL.steerAngle = newSteer;
         wheelFR.steerAngle = newSteer;
+        //wheelBL.steerAngle = newSteer;
+        //wheelBR.steerAngle = newSteer;
     }
     private void Drive()
     {
-        wheelFL.motorTorque = 800f;
-        wheelFR.motorTorque = 800f;
+        
+        currentspeed = Mathf.PI * wheelFL.radius * wheelFL.rpm * 60 / 1000;
+        if (currentspeed < maxSpeed)
+        {
+            wheelFL.motorTorque = maxMotorTongue;
+            wheelFR.motorTorque = maxMotorTongue;
+        }else
+        {
+            wheelFL.motorTorque = 0f;
+            wheelFR.motorTorque = 0f;
+        }
+        
     }
     private void Chechwaypointdistance()
     {
@@ -64,5 +85,17 @@ public class CarStering : MonoBehaviour
             }
         }
             
+    }
+    private void sensor()
+    {
+        RaycastHit hit;
+        Vector3 sensorStartingpos = transform.position;
+        sensorStartingpos.z += frontsensorposition;
+        sensorStartingpos.y += frontsensorposition;
+        if (Physics.Raycast(sensorStartingpos, transform.forward, out hit, sensorLenght))
+        {
+            Debug.DrawLine(sensorStartingpos, hit.point);
+        }
+        
     }
 }
