@@ -47,8 +47,8 @@ public class CarStering : MonoBehaviour
     }
     private void Drive()
     {
-        wheelFL.motorTorque = 100f;
-        wheelFR.motorTorque = 100f;
+        wheelFL.motorTorque = 800f;
+        wheelFR.motorTorque = 800f;
     }
     private void Chechwaypointdistance()
     {
