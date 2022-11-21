@@ -29,6 +29,7 @@ public class CarStering : MonoBehaviour
     void Start()
     {
         GetComponent<Rigidbody>().centerOfMass = centerOfmass;
+        //Debug.Log(GetComponent<Rigidbody>().centerOfMass);
         Transform[] pathTransforms = path.GetComponentsInChildren<Transform>();
         nodes = new List<Transform>();
 
