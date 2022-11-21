@@ -16,6 +16,8 @@ public class CarStering : MonoBehaviour
     public float maxMotorTongue = 80f;
     public float currentspeed;
     public float maxSpeed = 100f;
+    public float brakingspeed = 2f;
+    public float FullyStopped = 1f;
     public Vector3 centerOfmass;
     public float sensorLenght = 5f;
     public Vector3 MiddleFrontSensor = new Vector3(0f, 0.5f, 3f);
@@ -23,6 +25,7 @@ public class CarStering : MonoBehaviour
     public float frontsensorangle = 35;
     private bool avoiding = false;
     private float targetSteerangle = 0;
+    
    
     
     // Start is called before the first frame update
@@ -77,7 +80,33 @@ public class CarStering : MonoBehaviour
             wheelFL.motorTorque = 0f;
             wheelFR.motorTorque = 0f;
         }
+        if (currentNode >= 2)
+        {
+            if (currentspeed > brakingspeed)
+            {
+                wheelFL.brakeTorque = 100f;
+                wheelFR.brakeTorque = 100f;
+            }
+            
+            
+            else
+            {
+                wheelFL.brakeTorque = 0f;
+                wheelFR.brakeTorque = 0f;
+                wheelFL.motorTorque = 0f;
+                wheelFR.motorTorque = 0f;
+                
+            }
+            
+             
+
+        }
         
+
+
+
+
+
     }
     private void Chechwaypointdistance()
     {
