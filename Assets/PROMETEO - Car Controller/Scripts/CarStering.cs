@@ -80,27 +80,7 @@ public class CarStering : MonoBehaviour
             wheelFL.motorTorque = 0f;
             wheelFR.motorTorque = 0f;
         }
-        if (currentNode >= 2)
-        {
-            if (currentspeed > brakingspeed)
-            {
-                wheelFL.brakeTorque = 100f;
-                wheelFR.brakeTorque = 100f;
-            }
-            
-            
-            else
-            {
-                wheelFL.brakeTorque = 0f;
-                wheelFR.brakeTorque = 0f;
-                wheelFL.motorTorque = 0f;
-                wheelFR.motorTorque = 0f;
-                
-            }
-            
-             
-
-        }
+        
         
 
 
@@ -110,7 +90,7 @@ public class CarStering : MonoBehaviour
     }
     private void Chechwaypointdistance()
     {
-        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 0.5f)
+        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 2f)
         {
             if (currentNode == nodes.Count - 1)
             {
