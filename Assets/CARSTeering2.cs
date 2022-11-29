@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CarStering : MonoBehaviour
+public class CARSTeering2 : MonoBehaviour
 {
     public Transform path;
     public float AngleSpeed = 5f;
@@ -27,12 +27,26 @@ public class CarStering : MonoBehaviour
     private float targetSteerangle = 0;
     public float brakingoncorner = 200f;
     public float turningspeed = 30f;
+    public Vector3 velo;
+    public Rigidbody _RB;
+    public float Accelaration = 5000f;
+    public float motor = 100f;
+    [Space]
+    public bool turnHelp;
+    public float turnHelpAmount = 10f;
+
+
+    public float fakeBrakeDivider = 10f;
+    [System.NonSerialized]
+    public float mySpeed;
+
     
-   
     
+
     // Start is called before the first frame update
     void Start()
     {
+        _RB = GetComponent<Rigidbody>();
         GetComponent<Rigidbody>().centerOfMass = centerOfmass;
         //Debug.Log(GetComponent<Rigidbody>().centerOfMass);
         Transform[] pathTransforms = path.GetComponentsInChildren<Transform>();
@@ -49,7 +63,7 @@ public class CarStering : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     private void FixedUpdate()
     {
@@ -67,33 +81,40 @@ public class CarStering : MonoBehaviour
         relativeVector = relativeVector / relativeVector.magnitude;
         float newSteer = (relativeVector.x / relativeVector.magnitude) * maxSteerAngle;
         targetSteerangle = newSteer;
-        
+
     }
     private void Drive()
     {
+        velo = _RB.velocity;
+            velo = transform.InverseTransformDirection(_RB.velocity);
+        mySpeed = velo.z;
+        if (turnHelp)
+        {
+            
+            
+                _RB.AddTorque(Vector3.up * targetSteerangle * turnHelpAmount * _RB.mass);
+            
+            
+
+         
+            
+        }
+        
         
         currentspeed = Mathf.PI * wheelFL.radius * wheelFL.rpm * 60 / 1000;
         if (currentspeed < maxSpeed)
         {
             wheelFL.motorTorque = maxMotorTongue;
             wheelFR.motorTorque = maxMotorTongue;
-        }else
+        }
+        else
         {
             wheelFL.motorTorque = 0f;
             wheelFR.motorTorque = 0f;
         }
-        
-        if ( wheelFL.steerAngle > 5 && currentspeed > turningspeed)
-        {
-            wheelFL.brakeTorque = brakingoncorner;
-            wheelFR.brakeTorque = brakingoncorner;
 
-        }else
-        {
-            wheelFL.brakeTorque = 0f;
-            wheelFR.brakeTorque = 0f;
-        }
-         
+        
+
 
 
 
@@ -104,7 +125,7 @@ public class CarStering : MonoBehaviour
     }
     private void Chechwaypointdistance()
     {
-        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 1f)
+        if (Vector3.Distance(transform.position, nodes[currentNode].position) < 2f)
         {
             if (currentNode == nodes.Count - 1)
             {
@@ -115,7 +136,7 @@ public class CarStering : MonoBehaviour
                 currentNode++;
             }
         }
-            
+
     }
     private void sensor()
     {
@@ -125,11 +146,11 @@ public class CarStering : MonoBehaviour
         sensorStartingpos += transform.up * MiddleFrontSensor.y;
         float avoidMultiplier = 0;
         avoiding = false;
-        
-        
-       
+
+
+
         sensorStartingpos += transform.right * frontsensorposition;
-        
+
         if (Physics.Raycast(sensorStartingpos, transform.forward, out hit, sensorLenght))
         {
             if (!hit.collider.CompareTag("Terrain"))
@@ -149,7 +170,7 @@ public class CarStering : MonoBehaviour
             }
         }
         sensorStartingpos += -2 * transform.right * frontsensorposition;
-        
+
         if (Physics.Raycast(sensorStartingpos, transform.forward, out hit, sensorLenght))
         {
             if (!hit.collider.CompareTag("Terrain"))
@@ -181,7 +202,9 @@ public class CarStering : MonoBehaviour
                     if (hit.normal.x < 0)
                     {
                         avoidMultiplier = 1;
-                    }else {
+                    }
+                    else
+                    {
                         avoidMultiplier = -1;
                     }
                 }
@@ -190,9 +213,9 @@ public class CarStering : MonoBehaviour
         if (avoiding)
         {
             targetSteerangle = maxSteerAngle * avoidMultiplier;
-           
+
         }
-        
+
 
 
     }
