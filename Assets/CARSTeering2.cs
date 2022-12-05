@@ -34,7 +34,7 @@ public class CARSTeering2 : MonoBehaviour
     [Space]
     public bool turnHelp;
     public float turnHelpAmount = 10f;
-
+    public float turnAngleMinimum;
 
     public float fakeBrakeDivider = 10f;
     [System.NonSerialized]
@@ -88,7 +88,10 @@ public class CARSTeering2 : MonoBehaviour
         velo = _RB.velocity;
             velo = transform.InverseTransformDirection(_RB.velocity);
         mySpeed = velo.z;
-        if (turnHelp)
+
+ 
+
+        if (turnHelp && Mathf.Abs(targetSteerangle) > turnAngleMinimum)
         {
             
             

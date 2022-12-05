@@ -4,7 +4,13 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/RaceTrack.unity
+    guid: 4ac390abc4f8e5444888594d0b9edbc4
+  - enabled: 1
+    path: Assets/Scenes/Race.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: fb373e6b08d6f3742b949b8b9a2ea8e7, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 09659c4570bde0d4a8fa4e72d772d722, type: 2}
