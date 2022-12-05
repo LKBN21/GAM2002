@@ -28294,13 +28294,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d6a572a0ae914145be15edf8a5013c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motorForce: 1000
-  breakForce: 1500
-  maxSteerAngle: 30
+  motorForce: 500
+  breakForce: 200
+  maxSteerAngle: 25
   frontLeftWheelCollider: {fileID: 211082285}
   frontRightWheelCollider: {fileID: 605591276}
   rearLeftWheelCollider: {fileID: 609191617}
   rearRightWheelCollider: {fileID: 465970577}
+  turnHelp: 0
+  turnHelpAmount: 10
+  velo: {x: 0, y: 0, z: 0}
+  _RB: {fileID: 0}
 --- !u!4 &773802039 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8458274054959359515, guid: 820f040f45f2bba4599870e97a51b435, type: 3}

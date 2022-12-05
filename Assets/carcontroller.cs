@@ -23,8 +23,19 @@ public class carcontroller : MonoBehaviour
     [SerializeField] private WheelCollider frontRightWheelCollider;
     [SerializeField] private WheelCollider rearLeftWheelCollider;
     [SerializeField] private WheelCollider rearRightWheelCollider;
+    [SerializeField] public bool turnHelp;
+    [SerializeField]  public float turnHelpAmount = 10f;
+    public Vector3 velo;
+    public Rigidbody _RB;
 
-    
+
+
+
+    private void Start()
+    {
+        //_RB = GetComponent<Rigidbody>();
+    }
+
 
     private void FixedUpdate()
     {
@@ -63,6 +74,18 @@ public class carcontroller : MonoBehaviour
         currentSteerAngle = maxSteerAngle * horizontalInput;
         frontLeftWheelCollider.steerAngle = currentSteerAngle;
         frontRightWheelCollider.steerAngle = currentSteerAngle;
+        if (turnHelp)
+        {
+
+
+            _RB.AddTorque(Vector3.up * currentSteerAngle * turnHelpAmount * _RB.mass);
+
+
+
+
+
+        }
+
     }
 
     
