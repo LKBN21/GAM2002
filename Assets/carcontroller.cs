@@ -4,45 +4,71 @@ using UnityEngine;
 
 public class carcontroller : MonoBehaviour
 {
-    public bool isLocked;
-    [Header("Wheel Colliders")]
-    public WheelCollider frontWheelLeft;
-    public WheelCollider frontWheelRight;
-    public WheelCollider rearWheelRight;
-    public WheelCollider rearWheelLeft;
-    [Header("Steer settings")]
-    public float steerMax = 30f;
-    public float accelMax = 5000f;
-    public float brakeMAx = 5000f;
-    [System.NonSerialized]
-    public float steer = 0f;
-    [System.NonSerialized]
-    public float motor = 0f;
-    [System.NonSerialized]
-    public float brake = 0f;
+    
 
-    [Space]
-    public bool fakeBrake;
-    public float fakeBrakeDivider = 0.95f;
+    private const string HORIZONTAL = "Horizontal";
+    private const string VERTICAL = "Vertical";
 
-    [Space]
-    public bool turnHelp;
-    public float turnHelpAmount = 10f;
-    public bool isGrounded;
-    [System.NonSerialized]
-    public float mySpeed;
+    private float horizontalInput;
+    private float verticalInput;
+    private float currentSteerAngle;
+    private float currentbreakForce;
+    private bool isBreaking;
 
-    [System.NonSerialized]
-    public Vector3 velo;
+    [SerializeField] private float motorForce;
+    [SerializeField] private float breakForce;
+    [SerializeField] private float maxSteerAngle;
 
+    [SerializeField] private WheelCollider frontLeftWheelCollider;
+    [SerializeField] private WheelCollider frontRightWheelCollider;
+    [SerializeField] private WheelCollider rearLeftWheelCollider;
+    [SerializeField] private WheelCollider rearRightWheelCollider;
 
-    public virtual void Start()
+    
+
+    private void FixedUpdate()
     {
-        Init();
-    }
-    public virtual void Init()
-    {
+        GetInput();
+        HandleMotor();
+        HandleSteering();
         
-
     }
+
+
+    private void GetInput()
+    {
+        horizontalInput = Input.GetAxis(HORIZONTAL);
+        verticalInput = Input.GetAxis(VERTICAL);
+        isBreaking = Input.GetKey(KeyCode.Space);
+    }
+
+    private void HandleMotor()
+    {
+        frontLeftWheelCollider.motorTorque = verticalInput * motorForce;
+        frontRightWheelCollider.motorTorque = verticalInput * motorForce;
+        currentbreakForce = isBreaking ? breakForce : 0f;
+        ApplyBreaking();
+    }
+
+    private void ApplyBreaking()
+    {
+        frontRightWheelCollider.brakeTorque = currentbreakForce;
+        frontLeftWheelCollider.brakeTorque = currentbreakForce;
+        rearLeftWheelCollider.brakeTorque = currentbreakForce;
+        rearRightWheelCollider.brakeTorque = currentbreakForce;
+    }
+
+    private void HandleSteering()
+    {
+        currentSteerAngle = maxSteerAngle * horizontalInput;
+        frontLeftWheelCollider.steerAngle = currentSteerAngle;
+        frontRightWheelCollider.steerAngle = currentSteerAngle;
+    }
+
+    
+
+    
 }
+
+
+
