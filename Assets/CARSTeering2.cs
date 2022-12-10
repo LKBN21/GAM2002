@@ -11,8 +11,8 @@ public class CARSTeering2 : MonoBehaviour
     public float maxSteerAngle = 45f;
     public WheelCollider wheelFL;
     public WheelCollider wheelFR;
-    //public WheelCollider wheelBL;
-    //public WheelCollider wheelBR;
+    public WheelCollider wheelBL;
+    public WheelCollider wheelBR;
     public float maxMotorTongue = 80f;
     public float currentspeed;
     public float maxSpeed = 100f;
@@ -109,11 +109,15 @@ public class CARSTeering2 : MonoBehaviour
         {
             wheelFL.motorTorque = maxMotorTongue;
             wheelFR.motorTorque = maxMotorTongue;
+            wheelBL.motorTorque = maxMotorTongue;
+            wheelBR.motorTorque = maxMotorTongue;
         }
         else
         {
             wheelFL.motorTorque = 0f;
             wheelFR.motorTorque = 0f;
+            wheelBL.motorTorque = 0f;
+            wheelBR.motorTorque = 0f;
         }
 
         
@@ -156,7 +160,7 @@ public class CARSTeering2 : MonoBehaviour
 
         if (Physics.Raycast(sensorStartingpos, transform.forward, out hit, sensorLenght))
         {
-            if (!hit.collider.CompareTag("Terrain"))
+            if (!hit.collider.CompareTag("AccPoint"))
             {
                 Debug.DrawLine(sensorStartingpos, hit.point);
                 avoiding = true;
@@ -165,18 +169,30 @@ public class CARSTeering2 : MonoBehaviour
         }
         else if (Physics.Raycast(sensorStartingpos, Quaternion.AngleAxis(frontsensorangle, transform.up) * transform.forward, out hit, sensorLenght))
         {
-            if (!hit.collider.CompareTag("Terrain"))
+            if (!hit.collider.CompareTag("AccPoint"))
             {
                 Debug.DrawLine(sensorStartingpos, hit.point);
                 avoiding = true;
                 avoidMultiplier -= 0.5f;
+            }
+             if (hit.collider.CompareTag("BrakePoint"))
+            {
+                wheelFL.brakeTorque = 300f;
+                wheelFR.brakeTorque = 300f;
+                avoiding = false;
+            }
+             if (hit.collider.CompareTag("AccPoint"))
+            {
+                wheelFL.brakeTorque = 0f;
+                wheelFR.brakeTorque = 0f;
+                avoiding = false;
             }
         }
         sensorStartingpos += -2 * transform.right * frontsensorposition;
 
         if (Physics.Raycast(sensorStartingpos, transform.forward, out hit, sensorLenght))
         {
-            if (!hit.collider.CompareTag("Terrain"))
+            if (!hit.collider.CompareTag("AccPoint"))
             {
                 Debug.DrawLine(sensorStartingpos, hit.point);
                 avoiding = true;
@@ -185,11 +201,24 @@ public class CARSTeering2 : MonoBehaviour
         }
         else if (Physics.Raycast(sensorStartingpos, Quaternion.AngleAxis(-frontsensorangle, transform.up) * transform.forward, out hit, sensorLenght))
         {
-            if (!hit.collider.CompareTag("Terrain"))
+            if (!hit.collider.CompareTag("AccPoint"))
             {
                 Debug.DrawLine(sensorStartingpos, hit.point);
                 avoiding = true;
                 avoidMultiplier = 0.5f;
+            }
+             if (hit.collider.CompareTag(("BrakePoint")))
+            {
+                wheelFL.brakeTorque = 300f;
+                wheelFR.brakeTorque = 300f;
+                avoiding = false;
+
+            }
+             if (hit.collider.CompareTag(("AccPoint")))
+            {
+                wheelFL.brakeTorque = 0f;
+                wheelFR.brakeTorque = 0f;
+                avoiding = false;
             }
         }
 
@@ -197,7 +226,7 @@ public class CARSTeering2 : MonoBehaviour
         {
             if (Physics.Raycast(sensorStartingpos, transform.forward, out hit, sensorLenght))
             {
-                if (!hit.collider.CompareTag("Terrain"))
+                if (!hit.collider.CompareTag("AccPoint"))
                 {
 
                     Debug.DrawLine(sensorStartingpos, hit.point);
